@@ -41,7 +41,7 @@ Enable JWT Login flow
 | -------------- | ----------------- |
 | Welcome Header | Logged In         |
 | Login Form     | Not Logged In     |
-| Pokedex        | Logged In         |
+| Product        | Logged In         |
 
 
 ## Backend Tasks
