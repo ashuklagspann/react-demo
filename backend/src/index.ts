@@ -38,17 +38,6 @@ app.post('/login', (req, res) => {
 
 });
 
-app.get('/pokemon', async (req, res) => {
-  const response = await axios.get('https://pokeapi.co/api/v2/pokemon');
-  const parsedData = {
-    count: response.data.count,
-    next: response.data.next,
-    previous: response.data.previous,
-    results: response.data.results,
-};
-  res.json(parsedData)
-})
-
 function authenticateJWT(req: express.Request, res: express.Response, next: express.NextFunction) {
   const token = req.headers['authorization'];
 

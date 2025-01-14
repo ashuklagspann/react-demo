@@ -1,4 +1,4 @@
-export const pokemon = [
+export const product = [
   "charmander",
   "bulbasaur",
   "squirtle",
