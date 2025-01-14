@@ -1,6 +1,6 @@
-# Full-Stack Interview: Pokédex
+# Full-Stack Interview: Product
 
-You are tasked with building a React App that displays pokemon data (A Pokédex) for a logged-in Trainer. Both a backend and frontend are already running. One React component / template with static content has been provided.
+You are tasked with building a React App that displays Product  for a logged-in Trainer. Both a backend and frontend are already running. One React component / template with static content has been provided.
 
 # Terminology
 
@@ -12,7 +12,7 @@ _Trainer_
 
 - The fictional "end user" for whom this feature is built
 
-_Pokédex_
+_Products_
 
 - The frontend list of Pokemon that you are building for this challenge
 
@@ -20,22 +20,15 @@ _Pokédex_
 
 ## Frontend Tasks
 
-Call PokeAPI (v2) to fetch the following Pokemon Data:
+Call Product API to fetch Product datta
 
 | Field       | Source                                                   |
 | ----------- | -------------------------------------------------------- |
-| Name        | https://pokeapi.co/api/v2/pokemon/<pokemon_name>         |
-| Height      | https://pokeapi.co/api/v2/pokemon/<pokemon_name>         |
-| Weight      | https://pokeapi.co/api/v2/pokemon/<pokemon_name>         |
-| ID          | https://pokeapi.co/api/v2/pokemon/<pokemon_name>         |
-| Types       | https://pokeapi.co/api/v2/pokemon/<pokemon_name>         |
-| Description | https://pokeapi.co/api/v2/pokemon-species/<pokemon_name> |
+| Product      | https://dummyjson.com/product        |
+|
 
-Note: See `src/pokeApi.ts`
+Note: See `src/productApi.ts`
 
-Display `pokemonToFetch` pokemon in the Pokedex (see `src/data/pokemon.ts`)
-
-Pokemon type (Fire, Water, Electric, etc.) badges in Pokédex should change color based on the type (see src/data/pokemon.ts for different types and colors)
 
 Enable JWT Login flow
 
@@ -55,7 +48,6 @@ Enable JWT Login flow
 
 Implement `/login` route
 
-Implement `/pokemon` route and only return data if user is logged-in (see `backend/src/data/pokemon.ts`)
 
 ## Extras
 
@@ -64,9 +56,7 @@ Implement `/pokemon` route and only return data if user is logged-in (see `backe
 3. Add backend logic to protect all future routes with the same auth strategy as the /pokemon route
 4. Implement logout functionality
 
-# Links
 
-[PokeAPI Docs](https://pokeapi.co/docs/v2#pokemon-section)
 
 # Notes
 
@@ -74,7 +64,6 @@ Implement `/pokemon` route and only return data if user is logged-in (see `backe
 - Hot-reloading has been configured for both the frontend and the backend, but dev servers may need to be restarted manually:
   - The frontend can be (re)started with `npm run dev`
   - The backend can be restarted with `npm run dev` from the `/backend` directory
-- Assume all users share the same list of Pokemon (see `backend/src/data/pokemon.ts`)
 - See `backend/src/data/users` for "in-memory database" of valid users and passwords
 - Not all pokemon types need a different badge color -- only the types that are returned from the backend
 - The backend express app has already been configured with necessary middleware / CORS logic
