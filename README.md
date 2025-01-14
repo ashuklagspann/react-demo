@@ -14,7 +14,7 @@ _Trainer_
 
 _Products_
 
-- The frontend list of Pokemon that you are building for this challenge
+- The frontend list of Products you are building for this challenge
 
 # Acceptance Criteria
 
