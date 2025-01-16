@@ -24,8 +24,12 @@ Call Product API to fetch Product datta
 
 | Field       | Source                                                   |
 | ----------- | -------------------------------------------------------- |
-| Product      | https://dummyjson.com/product        |
-|
+| Title       | https://localhost:3000/product/<product_id>         |
+| Price       | https://localhost:3000/product/<product_id>         |
+| Discount    | https://localhost:3000/product/<product_id>         |
+| ID          | https://localhost:3000/product/<product_id>         |
+| Category    | https://localhost:3000/product/<product_id>         |
+| Description | https://localhost:3000/product-description/<product_id> |
 
 Note: See `src/productApi.ts`
 
@@ -51,10 +55,9 @@ Implement `/login` route
 
 ## Extras
 
-1. Implement client-side pagination and only show five Pokemon per page
-2. How can the Pokédex be "generified" for other kinds of lists? Imagine you are tasked with adding this list to a component library where various parts are optional (image, title, description, tags, etc.)
-3. Add backend logic to protect all future routes with the same auth strategy as the /pokemon route
-4. Implement logout functionality
+1. Implement client-side pagination and only show five Product per page
+2. Add backend logic to protect all future routes with the same auth strategy as the /product route
+3. Implement logout functionality
 
 
 
@@ -65,6 +68,5 @@ Implement `/login` route
   - The frontend can be (re)started with `npm run dev`
   - The backend can be restarted with `npm run dev` from the `/backend` directory
 - See `backend/src/data/users` for "in-memory database" of valid users and passwords
-- Not all pokemon types need a different badge color -- only the types that are returned from the backend
 - The backend express app has already been configured with necessary middleware / CORS logic
 - Remember to mark this repo as "Unlisted" in Codesandbox to avoid CORS issues
