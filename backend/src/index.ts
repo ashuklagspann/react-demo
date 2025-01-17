@@ -39,10 +39,11 @@ app.post('/login', (req, res) => {
 const DUMMY_JSON_API = 'https://dummyjson.com/products';
 
 // Route to get all products
-app.get('/api/products', async (req, res) => {
+app.get('/api/products-ids', async (req, res) => {
     try {
         const response = await axios.get(DUMMY_JSON_API);
-        res.json(response.data);
+       const ids =  response.data.products.map((product: { id: number }) => product.id);
+        res.json(ids);
     } catch (error) {
         console.error('Error fetching products:', error);
         res.status(500).json({ message: 'Error fetching products' });
@@ -54,7 +55,14 @@ app.get('/api/products/:id', async (req, res) => {
     const productId = req.params.id;
     try {
         const response = await axios.get(`${DUMMY_JSON_API}/${productId}`);
-        res.json(response.data);
+        const productDetails = {
+          title: response.data.title,
+          category: response.data.category,
+          price: response.data.price,
+          discountPercentage: response.data.discountPercentage,
+        };
+    
+        res.json(productDetails);
     } catch (error) {
         console.error('Error fetching product:', error);
         res.status(500).json({ message: 'Error fetching product' });
