@@ -24,12 +24,12 @@ Call Product API to fetch Product datta
 
 | Field       | Source                                                   |
 | ----------- | -------------------------------------------------------- |
-| Title       | https://localhost:3000/product/<product_id>         |
-| Price       | https://localhost:3000/product/<product_id>         |
-| Discount    | https://localhost:3000/product/<product_id>         |
-| ID          | https://localhost:3000/product/<product_id>         |
-| Category    | https://localhost:3000/product/<product_id>         |
-| Description | https://localhost:3000/product-description/<product_id> |
+| Title       | http://localhost:3000/api/products/<product_id>         |
+| Price       | http://localhost:3000/api/products/<product_id>         |
+| Discount    | http://localhost:3000/api/products/<product_id>         |
+| ID          | http://localhost:3000/api/products         |
+| Category    | http://localhost:3000/api/products/<product_id>         |
+| Description | http://localhost:3000/api/products-description/<product_id> |
 
 Note: See `src/productApi.ts`
 

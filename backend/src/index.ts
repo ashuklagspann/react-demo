@@ -62,7 +62,7 @@ app.get('/api/products/:id', async (req, res) => {
 });
 
 // Route to get a single product by ID
-app.get('/api/product-description/:id', async (req, res) => {
+app.get('/api/products-description/:id', async (req, res) => {
   const productId = req.params.id;
   try {
       const response = await axios.get(`${DUMMY_JSON_API}/${productId}`);
