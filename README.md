@@ -27,7 +27,7 @@ Call Product API to fetch Product datta
 | Title       | http://localhost:3000/api/products/<product_id>         |
 | Price       | http://localhost:3000/api/products/<product_id>         |
 | Discount    | http://localhost:3000/api/products/<product_id>         |
-| ID          | http://localhost:3000/api/products         |
+| ID          | http://localhost:3000/api/products-ids         |
 | Category    | http://localhost:3000/api/products/<product_id>         |
 | Description | http://localhost:3000/api/products-description/<product_id> |
 
