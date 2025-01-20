@@ -1,6 +1,6 @@
 # Full-Stack Interview: Product
 
-You are tasked with building a React App that displays Product  for a logged-in Trainer. Both a backend and frontend are already running. One React component / template with static content has been provided.
+You are tasked with building a React App that displays Product  for a logged-in (User)Tom. Both a backend and frontend are already running. One React component / template with static content has been provided.
 
 # Terminology
 
@@ -8,7 +8,7 @@ _Candidate_
 
 - You -- the person performing this coding challenge
 
-_Trainer_
+_User_
 
 - The fictional "end user" for whom this feature is built
 

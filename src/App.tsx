@@ -3,9 +3,9 @@ import clsx from "clsx";
 import { Product } from "./data/product";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { fetchAllProducts } from "./productApi";
 
-
-// const itemsPerPage = 5;
+const itemsPerPage = 5;
 
 export const App = () => {
 
@@ -21,21 +21,84 @@ export const App = () => {
 
 
 
+  const fetchProductId = async (url: string) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(url);
+      const productId = response.data.products.map((product: { id: number }) => product.id);
+      setProductsId(productId);
+
+    } catch (err) {
+      console.log('Error fetching Product data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProductId('http://localhost:3000/api/products'); // Initial fetch
+  }, [user]);
+
+
+  useEffect(() => {
+    setLoading(true);
+    fetchAllProducts(productsId)
+      .then(data => {
+        setProducts(data);
+        setTotalPages(Math.ceil(data.length / itemsPerPage));
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching Product:', error);
+        setLoading(false);
+      });
+  }, [productsId]);
+
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post('http://localhost:3000/login', { userName, password });
+      if (response) {
+        setUser(response.data.user.username)
+        localStorage.setItem('token', response.data.token)
+        localStorage.setItem('user', JSON.stringify(response.data.user))
+      }
+    } catch (error) {
+      console.log('error')
+    }
+
+  }
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentProducts = products.slice(startIndex, startIndex + itemsPerPage);
+  const userDetails = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') ?? "") : "";
+  const tokenValue = localStorage.getItem('token') ?? "";
 
   return (
     <>
       {loading ? <div>Loading...</div> : <div className="flex flex-col gap-12">
         {/* WELCOME */}
-        {localStorage.getItem('token') && <div>
+        {tokenValue && <div>
           <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-white">
-            {/* {`Welcome, ${userDetails.first_name}!`} */}
+            {`Welcome, ${userDetails.first_name}!`}
           </h2>
-          {/* <p>{userDetails.email}</p> */}
+          <p>{userDetails.email}</p>
         </div>}
 
         {/* LOGIN */}
-        {!localStorage.getItem('token') ? <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <form action="#" className="space-y-6" >
+        {!tokenValue ? <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+          <form action="#" className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
                 htmlFor="username"
@@ -91,24 +154,24 @@ export const App = () => {
           </form>
         </div> : <div className="flex flex-col gap-3 items-center overflow-auto h-vh">
           {/* Product */}
-          {/* {currentProducts.map(product => ( */}
-            <div  className="flex w-[32rem] border border-neutral-700/20 rounded-xl divide-x divide-neutral-700 overflow-hidden group">
+          {currentProducts.map(product => (
+            <div key={product.id} className="flex w-[32rem] border border-neutral-700/20 rounded-xl divide-x divide-neutral-700 overflow-hidden group">
               <div className="p-2 bg-gradient-to-b from-neutral-700/80  shrink-0 flex items-center justify-center relative overflow-hidden">
                 <img
                   className="object-cover w-24 h-24 scale-125  rounded-full z-10"
-                  // src={product.images[0] || ""}
+                  src={product.images[0] || ""}
                   alt=""
                 />
                 <img
                   className="object-cover w-80 h-80  rounded-full absolute translate-x-[2px] translate-y-[2px] blur-lg contrast-200 grayscale-[30%] opacity-20 "
-                  // src={product.images[0] || ""}
+                  src={product.images[0] || ""}
                   alt=""
                 />
               </div>
               <div className="p-2 grow flex flex-col gap-4">
                 <div className="flex justify-between items-center">
                   <h3 className="text-neutral-200 text-xl font-bold">
-                    {/* {product.title} */}
+                    {product.title}
                   </h3>
                   <div className="flex gap-1 flex-wrap justify-center">
                     <span
@@ -117,7 +180,7 @@ export const App = () => {
                         "ring-emerald-400"
                       )}
                     >
-                      {/* {product.category} */}
+                      {product.category}
                     </span>
                   </div>
                 </div>
@@ -126,40 +189,34 @@ export const App = () => {
                     <span className="uppercase text-neutral-500 font-semibold text-xs">
                       Discount Percentage
                     </span>
-                    <p className="">
-                      {/* {product.discountPercentage} */}
-                      </p>
+                    <p className="">{product.discountPercentage}</p>
                   </div>
                   <div className="grow flex flex-col justify-between">
                     <span className="uppercase text-neutral-500 font-semibold text-xs">
                       Price
                     </span>
-                    <p className="">
-                      {/* {product.price} */}
-                      </p>
+                    <p className="">{product.price}</p>
                   </div>
                   <div className="grow flex flex-col justify-between">
                     <span className="uppercase text-neutral-500 font-semibold text-xs">
                       ID
                     </span>
-                    <p className="">
-                      {/* {product.id} */}
-                      </p>
+                    <p className="">{product.id}</p>
                   </div>
                 </div>
                 <p className="text-left text-neutral-400 text-sm italic">
-                  {/* {product.description} */}
+                  {product.description}
                 </p>
               </div>
             </div>
-          {/* ))} */}
+          ))}
 
 
           {/* PAGINATION */}
           <div className="flex gap-4">
             <button
               type="button"
-              // onClick={handlePrevPage} disabled={currentPage === 1}
+              onClick={handlePrevPage} disabled={currentPage === 1}
               className={clsx(
                 "bg-gradient-to-b from-neutral-700 to-neutral-800 ring-1 ring-neutral-700/60 ring-inset text-neutral-300",
                 "p-2  flex items-center justify-center font-semibold text-sm w-20 h-8 leading-none ",
@@ -178,7 +235,7 @@ export const App = () => {
                 "rounded-md",
                 " disabled:text-neutral-400 disabled:from-neutral-800 disabled:to-neutral-800"
               )}
-             // onClick={handleNextPage} disabled={currentPage === totalPages}
+              onClick={handleNextPage} disabled={currentPage === totalPages}
             >
               Next
             </button>
@@ -191,7 +248,7 @@ export const App = () => {
 
 
 
-        {user && <button
+        {tokenValue && <button
           type="button"
           className="absolute top-1 right-1 font-sm text-neutral-500 hover:underline"
           onClick={() => { localStorage.clear(), setUser(''), setCurrentPage(1), setTotalPages(0) }}
