@@ -1,104 +1,24 @@
 import "./App.css";
 import clsx from "clsx";
 import { Product } from "./data/product";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { fetchAllProducts } from "./productApi";
 
-const itemsPerPage = 5;
 
 export const App = () => {
 
-  const [userName, setUserName] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [user, setUser] = useState<any>(null);
-
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(0);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [productsId, setProductsId] = useState([]);
-
-
-
-  const fetchProductId = async (url: string) => {
-    setLoading(true);
-    try {
-      const response = await axios.get(url);
-      const productId = response.data.products.map((product: { id: number }) => product.id);
-      setProductsId(productId);
-
-    } catch (err) {
-      console.log('Error fetching Product data');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProductId('http://localhost:3000/api/products'); // Initial fetch
-  }, [user]);
-
-
-  useEffect(() => {
-    setLoading(true);
-    fetchAllProducts(productsId)
-      .then(data => {
-        setProducts(data);
-        setTotalPages(Math.ceil(data.length / itemsPerPage));
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error('Error fetching Product:', error);
-        setLoading(false);
-      });
-  }, [productsId]);
-
-  const handleSubmit = async () => {
-    try {
-      const response = await axios.post('http://localhost:3000/login', { userName, password });
-      if (response) {
-        setUser(response.data.user.username)
-        localStorage.setItem('token', response.data.token)
-        localStorage.setItem('user', JSON.stringify(response.data.user))
-      }
-    } catch (error) {
-      console.log('error')
-    }
-
-  }
-
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentProducts = products.slice(startIndex, startIndex + itemsPerPage);
-  const userDetails = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') ?? "") : "";
-  const tokenValue = localStorage.getItem('token') ?? "";
-
   return (
     <>
-      {loading ? <div>Loading...</div> : <div className="flex flex-col gap-12">
+      <div className="flex flex-col gap-12">
         {/* WELCOME */}
-        {tokenValue && <div>
+        <div>
           <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-white">
-            {`Welcome, ${userDetails.first_name}!`}
+            {`Welcome, Tom!`}
           </h2>
-          <p>{userDetails.email}</p>
-        </div>}
+          <p>tom@user.com</p>
+        </div>
 
         {/* LOGIN */}
-        {!tokenValue ? <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <form action="#" className="space-y-6" onSubmit={handleSubmit}>
+        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+          <form action="#" className="space-y-6">
             <div>
               <label
                 htmlFor="username"
@@ -108,8 +28,6 @@ export const App = () => {
               </label>
               <div className="mt-2">
                 <input
-                  value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
                   id="username"
                   name="username"
                   type="text"
@@ -131,8 +49,6 @@ export const App = () => {
               </div>
               <div className="mt-2">
                 <input
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
                   id="password"
                   name="password"
                   type="password"
@@ -152,71 +68,176 @@ export const App = () => {
               </button>
             </div>
           </form>
-        </div> : <div className="flex flex-col gap-3 items-center overflow-auto h-vh">
+        </div>  <div className="flex flex-col gap-3 items-center overflow-auto h-vh">
           {/* Product */}
-          {currentProducts.map(product => (
-            <div key={product.id} className="flex w-[32rem] border border-neutral-700/20 rounded-xl divide-x divide-neutral-700 overflow-hidden group">
-              <div className="p-2 bg-gradient-to-b from-neutral-700/80  shrink-0 flex items-center justify-center relative overflow-hidden">
-                <img
-                  className="object-cover w-24 h-24 scale-125  rounded-full z-10"
-                  src={product.images[0] || ""}
-                  alt=""
-                />
-                <img
-                  className="object-cover w-80 h-80  rounded-full absolute translate-x-[2px] translate-y-[2px] blur-lg contrast-200 grayscale-[30%] opacity-20 "
-                  src={product.images[0] || ""}
-                  alt=""
-                />
-              </div>
-              <div className="p-2 grow flex flex-col gap-4">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-neutral-200 text-xl font-bold">
-                    {product.title}
-                  </h3>
-                  <div className="flex gap-1 flex-wrap justify-center">
-                    <span
-                      className={clsx(
-                        "text-xs rounded-lg text-white px-2 py-1 font-medium  ring-inset grow-0 inline-flex items-center leading-none ring-1",
-                        "ring-emerald-400"
-                      )}
-                    >
-                      {product.category}
-                    </span>
-                  </div>
-                </div>
-                <div className="min-h-12 rounded-md border border-neutral-700/20 flex divide-x divide-neutral-700/20 py-1">
-                  <div className="grow flex flex-col justify-between">
-                    <span className="uppercase text-neutral-500 font-semibold text-xs">
-                      Discount Percentage
-                    </span>
-                    <p className="">{product.discountPercentage}</p>
-                  </div>
-                  <div className="grow flex flex-col justify-between">
-                    <span className="uppercase text-neutral-500 font-semibold text-xs">
-                      Price
-                    </span>
-                    <p className="">{product.price}</p>
-                  </div>
-                  <div className="grow flex flex-col justify-between">
-                    <span className="uppercase text-neutral-500 font-semibold text-xs">
-                      ID
-                    </span>
-                    <p className="">{product.id}</p>
-                  </div>
-                </div>
-                <p className="text-left text-neutral-400 text-sm italic">
-                  {product.description}
-                </p>
-              </div>
+          <div className="flex w-[32rem] border border-neutral-700/20 rounded-xl divide-x divide-neutral-700 overflow-hidden group">
+            <div className="p-2 bg-gradient-to-b from-neutral-700/80  shrink-0 flex items-center justify-center relative overflow-hidden">
+              <img
+                className="object-cover w-24 h-24 scale-125  rounded-full z-10"
+                src={Product.images[0] || ""}
+                alt=""
+              />
+              <img
+                className="object-cover w-80 h-80  rounded-full absolute translate-x-[2px] translate-y-[2px] blur-lg contrast-200 grayscale-[30%] opacity-20 "
+                src={Product.images[0] || ""}
+                alt=""
+              />
             </div>
-          ))}
+            <div className="p-2 grow flex flex-col gap-4">
+              <div className="flex justify-between items-center">
+                <h3 className="text-neutral-200 text-xl font-bold">
+                  {Product.title}
+                </h3>
+                <div className="flex gap-1 flex-wrap justify-center">
+                  <span
+                    className={clsx(
+                      "text-xs rounded-lg text-white px-2 py-1 font-medium  ring-inset grow-0 inline-flex items-center leading-none ring-1",
+                      "ring-emerald-400"
+                    )}
+                  >
+                    {Product.category}
+                  </span>
+                </div>
+              </div>
+              <div className="min-h-12 rounded-md border border-neutral-700/20 flex divide-x divide-neutral-700/20 py-1">
+                <div className="grow flex flex-col justify-between">
+                  <span className="uppercase text-neutral-500 font-semibold text-xs">
+                    Discount Percentage
+                  </span>
+                  <p className="">{Product.discountPercentage}</p>
+                </div>
+                <div className="grow flex flex-col justify-between">
+                  <span className="uppercase text-neutral-500 font-semibold text-xs">
+                    Price
+                  </span>
+                  <p className="">{Product.price}</p>
+                </div>
+                <div className="grow flex flex-col justify-between">
+                  <span className="uppercase text-neutral-500 font-semibold text-xs">
+                    ID
+                  </span>
+                  <p className="">{Product.id}</p>
+                </div>
+              </div>
+              <p className="text-left text-neutral-400 text-sm italic">
+                {Product.description}
+              </p>
+            </div>
+          </div>
+          <div className="flex w-[32rem] border border-neutral-700/20 rounded-xl divide-x divide-neutral-700 overflow-hidden group">
+            <div className="p-2 bg-gradient-to-b from-neutral-700/80  shrink-0 flex items-center justify-center relative overflow-hidden">
+              <img
+                className="object-cover w-24 h-24 scale-125  rounded-full z-10"
+                src={Product.images[0] || ""}
+                alt=""
+              />
+              <img
+                className="object-cover w-80 h-80  rounded-full absolute translate-x-[2px] translate-y-[2px] blur-lg contrast-200 grayscale-[30%] opacity-20 "
+                src={Product.images[0] || ""}
+                alt=""
+              />
+            </div>
+            <div className="p-2 grow flex flex-col gap-4">
+              <div className="flex justify-between items-center">
+                <h3 className="text-neutral-200 text-xl font-bold">
+                  {Product.title}
+                </h3>
+                <div className="flex gap-1 flex-wrap justify-center">
+                  <span
+                    className={clsx(
+                      "text-xs rounded-lg text-white px-2 py-1 font-medium  ring-inset grow-0 inline-flex items-center leading-none ring-1",
+                      "ring-emerald-400"
+                    )}
+                  >
+                    {Product.category}
+                  </span>
+                </div>
+              </div>
+              <div className="min-h-12 rounded-md border border-neutral-700/20 flex divide-x divide-neutral-700/20 py-1">
+                <div className="grow flex flex-col justify-between">
+                  <span className="uppercase text-neutral-500 font-semibold text-xs">
+                    Discount Percentage
+                  </span>
+                  <p className="">{Product.discountPercentage}</p>
+                </div>
+                <div className="grow flex flex-col justify-between">
+                  <span className="uppercase text-neutral-500 font-semibold text-xs">
+                    Price
+                  </span>
+                  <p className="">{Product.price}</p>
+                </div>
+                <div className="grow flex flex-col justify-between">
+                  <span className="uppercase text-neutral-500 font-semibold text-xs">
+                    ID
+                  </span>
+                  <p className="">{Product.id}</p>
+                </div>
+              </div>
+              <p className="text-left text-neutral-400 text-sm italic">
+                {Product.description}
+              </p>
+            </div>
+          </div>
+          <div className="flex w-[32rem] border border-neutral-700/20 rounded-xl divide-x divide-neutral-700 overflow-hidden group">
+            <div className="p-2 bg-gradient-to-b from-neutral-700/80  shrink-0 flex items-center justify-center relative overflow-hidden">
+              <img
+                className="object-cover w-24 h-24 scale-125  rounded-full z-10"
+                src={Product.images[0] || ""}
+                alt=""
+              />
+              <img
+                className="object-cover w-80 h-80  rounded-full absolute translate-x-[2px] translate-y-[2px] blur-lg contrast-200 grayscale-[30%] opacity-20 "
+                src={Product.images[0] || ""}
+                alt=""
+              />
+            </div>
+            <div className="p-2 grow flex flex-col gap-4">
+              <div className="flex justify-between items-center">
+                <h3 className="text-neutral-200 text-xl font-bold">
+                  {Product.title}
+                </h3>
+                <div className="flex gap-1 flex-wrap justify-center">
+                  <span
+                    className={clsx(
+                      "text-xs rounded-lg text-white px-2 py-1 font-medium  ring-inset grow-0 inline-flex items-center leading-none ring-1",
+                      "ring-emerald-400"
+                    )}
+                  >
+                    {Product.category}
+                  </span>
+                </div>
+              </div>
+              <div className="min-h-12 rounded-md border border-neutral-700/20 flex divide-x divide-neutral-700/20 py-1">
+                <div className="grow flex flex-col justify-between">
+                  <span className="uppercase text-neutral-500 font-semibold text-xs">
+                    Discount Percentage
+                  </span>
+                  <p className="">{Product.discountPercentage}</p>
+                </div>
+                <div className="grow flex flex-col justify-between">
+                  <span className="uppercase text-neutral-500 font-semibold text-xs">
+                    Price
+                  </span>
+                  <p className="">{Product.price}</p>
+                </div>
+                <div className="grow flex flex-col justify-between">
+                  <span className="uppercase text-neutral-500 font-semibold text-xs">
+                    ID
+                  </span>
+                  <p className="">{Product.id}</p>
+                </div>
+              </div>
+              <p className="text-left text-neutral-400 text-sm italic">
+                {Product.description}
+              </p>
+            </div>
+          </div>
 
 
           {/* PAGINATION */}
           <div className="flex gap-4">
             <button
               type="button"
-              onClick={handlePrevPage} disabled={currentPage === 1}
               className={clsx(
                 "bg-gradient-to-b from-neutral-700 to-neutral-800 ring-1 ring-neutral-700/60 ring-inset text-neutral-300",
                 "p-2  flex items-center justify-center font-semibold text-sm w-20 h-8 leading-none ",
@@ -226,7 +247,7 @@ export const App = () => {
             >
               Previous
             </button>
-            <span> Page {currentPage} of {totalPages} </span>
+            <span> Page 1 of 2 </span>
             <button
               type="button"
               className={clsx(
@@ -235,27 +256,26 @@ export const App = () => {
                 "rounded-md",
                 " disabled:text-neutral-400 disabled:from-neutral-800 disabled:to-neutral-800"
               )}
-              onClick={handleNextPage} disabled={currentPage === totalPages}
             >
               Next
             </button>
 
           </div>
-        </div>}
+        </div>
 
 
 
 
 
 
-        {tokenValue && <button
+        <button
           type="button"
           className="absolute top-1 right-1 font-sm text-neutral-500 hover:underline"
-          onClick={() => { localStorage.clear(), setUser(''), setCurrentPage(1), setTotalPages(0) }}
+
         >
           Logout
-        </button>}
-      </div>}
+        </button>
+      </div>
     </>
 
   );

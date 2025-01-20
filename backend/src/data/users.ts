@@ -7,6 +7,6 @@ export const users: Record<
     firstName: "trainer",
     lastName: "trainer",
     password: "password123",
-    email: "trainer@trainer.com",
+    email: "tom@user.com",
   }
 };

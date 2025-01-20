@@ -1,6 +1,6 @@
 # Full-Stack Interview: Product
 
-You are tasked with building a React App that displays Product  for a logged-in (User)Tom. Both a backend and frontend are already running. One React component / template with static content has been provided.
+You are tasked with building a React App that displays Product  for a logged-in (User)Tom. Both the backend and frontend are already running. One React component / template with static content has been provided.
 
 # Terminology
 
@@ -24,14 +24,17 @@ Call Product API to fetch Product datta
 
 | Field       | Source                                                   |
 | ----------- | -------------------------------------------------------- |
-| Title       | http://localhost:3000/api/products/<product_id>         |
-| Price       | http://localhost:3000/api/products/<product_id>         |
-| Discount    | http://localhost:3000/api/products/<product_id>         |
-| ID          | http://localhost:3000/api/products-ids         |
-| Category    | http://localhost:3000/api/products/<product_id>         |
+| ID          | http://localhost:3000/api/product-ids         |
+| Title       | http://localhost:3000/api/product-details/<product_id>         |
+| Price       | http://localhost:3000/api/product-details/<product_id>         |
+| Discount    | http://localhost:3000/api/products-details/<product_id>         |
+| Category    | http://localhost:3000/api/products-details/<product_id>         |
+| Images      | http://localhost:3000/api/products-details/<product_id>         |
 | Description | http://localhost:3000/api/products-description/<product_id> |
 
-Note: See `src/productApi.ts`
+Below file you can create function to fetch the Products details and Description
+
+Note: `src/productApi.ts`
 
 
 Enable JWT Login flow

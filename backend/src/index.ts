@@ -23,23 +23,13 @@ app.use(bodyParser.json());
 
 
 // Login route
-app.post('/login', (req, res) => {
-  const { userName, password } = req.body;
 
-  if (userName !== users.trainer.userName || password !== users.trainer.password) {
-      return res.status(401).json({ message: 'Invalid credentials' });
-  }
-
-  const token = jwt.sign({ email: users.trainer.email, username: users.trainer.userName }, 'jwt_secret', { expiresIn: '1h' });
-  res.json({ token, user: { username: users.trainer.userName, email: users.trainer.email, first_name: users.trainer.firstName } });
-
-});
 
 // Base URL for DummyJSON API
 const DUMMY_JSON_API = 'https://dummyjson.com/products';
 
 // Route to get all products
-app.get('/api/products-ids', async (req, res) => {
+app.get('/api/product-ids', async (req, res) => {
     try {
         const response = await axios.get(DUMMY_JSON_API);
        const ids =  response.data.products.map((product: { id: number }) => product.id);
@@ -51,15 +41,17 @@ app.get('/api/products-ids', async (req, res) => {
 });
 
 // Route to get a single product by ID
-app.get('/api/products/:id', async (req, res) => {
+app.get('/api/product-details/:id', async (req, res) => {
     const productId = req.params.id;
     try {
         const response = await axios.get(`${DUMMY_JSON_API}/${productId}`);
         const productDetails = {
+          id: response.data.id,
           title: response.data.title,
           category: response.data.category,
           price: response.data.price,
           discountPercentage: response.data.discountPercentage,
+          images: response.data.images 
         };
     
         res.json(productDetails);
@@ -70,11 +62,11 @@ app.get('/api/products/:id', async (req, res) => {
 });
 
 // Route to get a single product by ID
-app.get('/api/products-description/:id', async (req, res) => {
+app.get('/api/product-description/:id', async (req, res) => {
   const productId = req.params.id;
   try {
       const response = await axios.get(`${DUMMY_JSON_API}/${productId}`);
-      res.json({ description: response.data.description });
+      res.json({ description: response.data.description, id: response.data.id });
   } catch (error) {
       console.error('Error fetching product:', error);
       res.status(500).json({ message: 'Error fetching product' });
