@@ -72,7 +72,7 @@ Implement `/login` route
 - All necessary backend + frontend libraries have been provided
 - Hot-reloading has been configured for both the frontend and the backend, but dev servers may need to be restarted manually:
   - The frontend can be (re)started with `npm run dev`
-  - The backend can be restarted with `npm run dev` from the `/backend` directory
+  - The backend can be restarted with `npm start` from the `/backend` directory
 - See `backend/src/data/users` for "in-memory database" of valid users and passwords
 - The backend express app has already been configured with necessary middleware / CORS logic
 - Remember to mark this repo as "Unlisted" in Codesandbox to avoid CORS issues
