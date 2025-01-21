@@ -27,10 +27,10 @@ Call Product API to fetch Product datta
 | ID          | http://localhost:3000/api/product-ids                       |
 | Title       | http://localhost:3000/api/product-details/<product_id>      |
 | Price       | http://localhost:3000/api/product-details/<product_id>      |
-| Discount    | http://localhost:3000/api/products-details/<product_id>     |
-| Category    | http://localhost:3000/api/products-details/<product_id>     |
-| Images      | http://localhost:3000/api/products-details/<product_id>     |
-| Description | http://localhost:3000/api/products-description/<product_id> |
+| Discount    | http://localhost:3000/api/product-details/<product_id>      |
+| Category    | http://localhost:3000/api/product-details/<product_id>      |
+| Images      | http://localhost:3000/api/product-details/<product_id>      |
+| Description | http://localhost:3000/api/product-description/<product_id>  |
 
 Below file you can create function to fetch the Products details and Description
 
